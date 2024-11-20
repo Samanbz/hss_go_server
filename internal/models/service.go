@@ -1,7 +1,7 @@
 package models
 
 type Service struct {
-	ID        *uint32  `json:"id"`
+	ID        *int     `json:"id"`
 	AddressID *string  `json:"address_id" validate:"required"`
 	CompanyID *string  `json:"company_id" validate:"required"`
 	Title     *string  `json:"title" validate:"required"`

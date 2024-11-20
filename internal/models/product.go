@@ -1,7 +1,7 @@
 package models
 
 type Product struct {
-	ID          *uint32  `json:"id"`
+	ID          *int     `json:"id"`
 	CompanyID   *string  `json:"company_id" validate:"required"`
 	AddressID   *string  `json:"address_id" validate:"required"`
 	Name        *string  `json:"name" validate:"required"`

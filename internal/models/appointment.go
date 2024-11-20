@@ -5,19 +5,19 @@ import (
 )
 
 type Appointment struct {
-	ID         *uint32    `json:"id"`
+	ID         *int       `json:"id"`
 	Start      *time.Time `json:"start" validate:"required"`
 	End        *time.Time `json:"end" validate:"required"`
-	CompanyID  *uint32    `json:"user_id" validate:"required"`
-	AddressID  *uint32    `json:"address_id" validate:"required"`
-	EmployeeID *uint32    `json:"employee_id"`
-	ServiceID  *uint32    `json:"service_id"`
-	CustomerID *uint32    `json:"customer_id" validate:"required"`
+	CompanyID  *int       `json:"user_id" validate:"required"`
+	AddressID  *int       `json:"address_id" validate:"required"`
+	EmployeeID *int       `json:"employee_id"`
+	ServiceID  *int       `json:"service_id"`
+	CustomerID *int       `json:"customer_id" validate:"required"`
 }
 
 func NewAppointment(
 	start, end *time.Time,
-	companyID, addressID, employeeID, serviceID, customerID *uint32) *Appointment {
+	companyID, addressID, employeeID, serviceID, customerID *int) *Appointment {
 
 	return &Appointment{
 		Start:      start,
