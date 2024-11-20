@@ -1,41 +1,29 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"hss/internal/handlers"
-	"hss/internal/models"
-	"log"
-	"os"
+	"hss/internal/api/routes"
+	"hss/internal/database"
+	"hss/pkg/utils/singleton"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	app := fiber.New()
 
-	dbUrl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", os.Getenv("DB_USER"), os.Getenv("DB_PWD"), os.Getenv("DB_DOMAIN"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
-
-	//TODO move to new location
-	config, err := pgxpool.ParseConfig(dbUrl)
-	if err != nil {
-		log.Fatalf("Error parsing config: %v\n", err)
+	if err := godotenv.Load(); err != nil {
+		panic("Error loading .env file")
 	}
 
-	pool, err := pgxpool.NewWithConfig(context.Background(), config)
-	if err != nil {
-		log.Fatalf("Error creating pool: %v\n", err)
-	}
+	pool := database.InitDB()
 	defer pool.Close()
-	//
 
-	app.Post("/company", handlers.InsertCompany)
-	company := models.NewCompany(
-		"username", "companyName", "repFirstname", "repLastname", "some.email@gmail.com", "password")
+	CompanyHandler, _ := singleton.InitCompanySingletons(pool)
+	routes.CompanyRoutes(app, CompanyHandler)
 
-	str, _ := company.ToString()
-	fmt.Printf("%s\n", str)
+	AddressHandler, _ := singleton.InitAddressSingletons(pool)
+	routes.AddressRoutes(app, AddressHandler)
 
 	app.Get("/", handleRoot)
 	app.Listen(":3000")
