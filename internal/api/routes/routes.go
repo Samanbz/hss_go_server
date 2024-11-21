@@ -25,3 +25,19 @@ func AppointmentRoutes(app *fiber.App, AppointmentHandler *handlers.AppointmentH
 	app.Get("/appointment/:id", AppointmentHandler.GetAppointmentByID)
 	app.Get("/appointment/company/:id", AppointmentHandler.GetAppointmentsByCompanyID)
 }
+
+func ServiceRoutes(app *fiber.App, ServiceHandler *handlers.ServiceHandler) {
+	app.Post("/service", ServiceHandler.InsertService)
+	app.Get("/service/:id", ServiceHandler.GetServiceByID)
+	app.Get("/service/address/:id", ServiceHandler.GetServicesByAddressID)
+}
+
+func CustomerRoutes(app *fiber.App, CustomerHandler *handlers.CustomerHandler) {
+	app.Post("/customer", CustomerHandler.InsertCustomer)
+	app.Get("/customer/:id", CustomerHandler.GetCustomerByID)
+}
+
+func ProductRoutes(app *fiber.App, ProductHandler *handlers.ProductHandler) {
+	app.Post("/product", ProductHandler.InsertProduct)
+	app.Get("/product/:id", ProductHandler.GetProductByID)
+}

@@ -11,11 +11,11 @@ import (
 )
 
 type AddressHandler struct {
-	addressService services.AddressService
+	addressService *services.AddressService
 }
 
-func NewAddressHandler(addressService services.AddressService) AddressHandler {
-	return AddressHandler{addressService: addressService}
+func NewAddressHandler(addressService *services.AddressService) *AddressHandler {
+	return &AddressHandler{addressService: addressService}
 }
 
 func (h *AddressHandler) InsertAddress(c *fiber.Ctx) error {

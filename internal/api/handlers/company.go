@@ -10,11 +10,11 @@ import (
 )
 
 type CompanyHandler struct {
-	companyService services.CompanyService
+	companyService *services.CompanyService
 }
 
-func NewCompanyHandler(companyService services.CompanyService) CompanyHandler {
-	return CompanyHandler{companyService: companyService}
+func NewCompanyHandler(companyService *services.CompanyService) *CompanyHandler {
+	return &CompanyHandler{companyService: companyService}
 }
 
 func (h *CompanyHandler) InsertCompany(c *fiber.Ctx) error {

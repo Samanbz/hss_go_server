@@ -7,11 +7,11 @@ import (
 )
 
 type EmployeeService struct {
-	employeeRepository repositories.EmployeeRepository
+	employeeRepository *repositories.EmployeeRepository
 }
 
-func NewEmployeeService(employeeRepository repositories.EmployeeRepository) EmployeeService {
-	return EmployeeService{employeeRepository: employeeRepository}
+func NewEmployeeService(employeeRepository *repositories.EmployeeRepository) *EmployeeService {
+	return &EmployeeService{employeeRepository: employeeRepository}
 }
 
 func (s *EmployeeService) InsertEmployee(ctx context.Context, employee *models.Employee) error {

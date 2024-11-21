@@ -9,19 +9,19 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type EmployeeHandler struct {
-	employeeService *services.EmployeeService
+type CustomerHandler struct {
+	customerService *services.CustomerService
 }
 
-func NewEmployeeHandler(employeeService *services.EmployeeService) *EmployeeHandler {
-	return &EmployeeHandler{employeeService: employeeService}
+func NewCustomerHandler(customerService *services.CustomerService) *CustomerHandler {
+	return &CustomerHandler{customerService: customerService}
 }
 
-func (h *EmployeeHandler) InsertEmployee(c *fiber.Ctx) error {
+func (h *CustomerHandler) InsertCustomer(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	employee, err := models.NewEmployeeFromJSON(c.Body())
+	customer, err := models.NewCustomerFromJSON(c.Body())
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -29,16 +29,16 @@ func (h *EmployeeHandler) InsertEmployee(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := h.employeeService.InsertEmployee(ctx, employee); err != nil {
+	if err := h.customerService.InsertCustomer(ctx, customer); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": fmt.Sprintf("cannot insert employee, %v", err),
+			"error": fmt.Sprintf("cannot insert customer, %v", err),
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(employee)
+	return c.Status(fiber.StatusOK).JSON(customer)
 }
 
-func (h *EmployeeHandler) GetEmployeeByID(c *fiber.Ctx) error {
+func (h *CustomerHandler) GetCustomerByID(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -49,12 +49,12 @@ func (h *EmployeeHandler) GetEmployeeByID(c *fiber.Ctx) error {
 		})
 	}
 
-	employee, err := h.employeeService.GetEmployeeByID(ctx, id)
+	customer, err := h.customerService.GetCustomerByID(ctx, id)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": fmt.Sprintf("cannot get employee, %v", err),
+			"error": fmt.Sprintf("cannot get customer, %v", err),
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(employee)
+	return c.Status(fiber.StatusOK).JSON(customer)
 }

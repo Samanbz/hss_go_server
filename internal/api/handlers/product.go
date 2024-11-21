@@ -9,19 +9,19 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type EmployeeHandler struct {
-	employeeService *services.EmployeeService
+type ProductHandler struct {
+	productService *services.ProductService
 }
 
-func NewEmployeeHandler(employeeService *services.EmployeeService) *EmployeeHandler {
-	return &EmployeeHandler{employeeService: employeeService}
+func NewProductHandler(productService *services.ProductService) *ProductHandler {
+	return &ProductHandler{productService: productService}
 }
 
-func (h *EmployeeHandler) InsertEmployee(c *fiber.Ctx) error {
+func (h *ProductHandler) InsertProduct(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	employee, err := models.NewEmployeeFromJSON(c.Body())
+	product, err := models.NewProductFromJSON(c.Body())
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -29,16 +29,16 @@ func (h *EmployeeHandler) InsertEmployee(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := h.employeeService.InsertEmployee(ctx, employee); err != nil {
+	if err := h.productService.InsertProduct(ctx, product); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": fmt.Sprintf("cannot insert employee, %v", err),
+			"error": fmt.Sprintf("cannot insert product, %v", err),
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(employee)
+	return c.Status(fiber.StatusOK).JSON(product)
 }
 
-func (h *EmployeeHandler) GetEmployeeByID(c *fiber.Ctx) error {
+func (h *ProductHandler) GetProductByID(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -49,12 +49,12 @@ func (h *EmployeeHandler) GetEmployeeByID(c *fiber.Ctx) error {
 		})
 	}
 
-	employee, err := h.employeeService.GetEmployeeByID(ctx, id)
+	product, err := h.productService.GetProductByID(ctx, id)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": fmt.Sprintf("cannot get employee, %v", err),
+			"error": fmt.Sprintf("cannot get product, %v", err),
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(employee)
+	return c.Status(fiber.StatusOK).JSON(product)
 }

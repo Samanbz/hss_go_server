@@ -11,8 +11,8 @@ type EmployeeRepository struct {
 	conn *pgxpool.Pool
 }
 
-func NewEmployeeRepository(pool *pgxpool.Pool) EmployeeRepository {
-	return EmployeeRepository{conn: pool}
+func NewEmployeeRepository(pool *pgxpool.Pool) *EmployeeRepository {
+	return &EmployeeRepository{conn: pool}
 }
 
 func (r *EmployeeRepository) InsertEmployee(ctx context.Context, employee *models.Employee) error {
@@ -40,9 +40,14 @@ func (r *EmployeeRepository) GetEmployeeByID(ctx context.Context, id int) (*mode
 
 	employee := models.Employee{}
 	err := row.Scan(&employee.ID, &employee.Firstname, &employee.Lastname, &employee.CompanyID, &employee.AddressID, &employee.Email, &employee.Phone)
-	employee.ValidateOutput()
 	if err != nil {
 		return nil, err
 	}
+
+	err = employee.ValidateOutput()
+	if err != nil {
+		return nil, err
+	}
+
 	return &employee, nil
 }

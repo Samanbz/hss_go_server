@@ -7,11 +7,11 @@ import (
 )
 
 type AddressService struct {
-	AddressRepository repositories.AddressRepository
+	AddressRepository *repositories.AddressRepository
 }
 
-func NewAddressService(addressRepository repositories.AddressRepository) AddressService {
-	return AddressService{AddressRepository: addressRepository}
+func NewAddressService(addressRepository *repositories.AddressRepository) *AddressService {
+	return &AddressService{AddressRepository: addressRepository}
 }
 
 func (s *AddressService) InsertAddress(ctx context.Context, address *models.Address) error {

@@ -11,8 +11,8 @@ type AppointmentRepository struct {
 	conn *pgxpool.Pool
 }
 
-func NewAppointmentRepository(pool *pgxpool.Pool) AppointmentRepository {
-	return AppointmentRepository{conn: pool}
+func NewAppointmentRepository(pool *pgxpool.Pool) *AppointmentRepository {
+	return &AppointmentRepository{conn: pool}
 }
 
 func (r *AppointmentRepository) InsertAppointment(ctx context.Context, appointment *models.Appointment) error {

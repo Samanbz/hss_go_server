@@ -19,15 +19,18 @@ func main() {
 	pool := database.InitDB()
 	defer pool.Close()
 
-	CompanyHandler, AddressHandler, EmployeeHandler, AppointmentHandler, err := singleton.InitSingletons(pool)
+	RequestHandlers, err := singleton.InitSingletons(pool)
 	if err != nil {
 		panic(err)
 	}
 
-	routes.CompanyRoutes(app, CompanyHandler)
-	routes.AddressRoutes(app, AddressHandler)
-	routes.EmployeeRoutes(app, EmployeeHandler)
-	routes.AppointmentRoutes(app, AppointmentHandler)
+	routes.CompanyRoutes(app, RequestHandlers.CompanyHandler)
+	routes.AddressRoutes(app, RequestHandlers.AddressHandler)
+	routes.EmployeeRoutes(app, RequestHandlers.EmployeeHandler)
+	routes.AppointmentRoutes(app, RequestHandlers.AppointmentHandler)
+	routes.ServiceRoutes(app, RequestHandlers.ServiceHandler)
+	routes.CustomerRoutes(app, RequestHandlers.CustomerHandler)
+	routes.ProductRoutes(app, RequestHandlers.ProductHandler)
 
 	app.Get("/", handleRoot)
 	app.Listen(":3000")

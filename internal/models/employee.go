@@ -15,9 +15,9 @@ type Employee struct {
 	Phone     string `json:"phone" validate:"e164"`
 }
 
-func NewEmployee(firstname, lastname, email, phone string, addressID, companyID int) Employee {
+func NewEmployee(firstname, lastname, email, phone string, addressID, companyID int) *Employee {
 
-	return Employee{
+	return &Employee{
 		Firstname: firstname,
 		Lastname:  lastname,
 		AddressID: addressID,
@@ -35,7 +35,7 @@ func NewEmployeeFromJSON(jsonData []byte) (*Employee, error) {
 }
 
 func (e *Employee) ValidateInput() error {
-	return validation.Validate.Struct(e)
+	return validation.Validate.StructExcept(e, "ID")
 }
 
 func (e *Employee) ValidateOutput() error {

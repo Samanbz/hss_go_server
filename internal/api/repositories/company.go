@@ -11,8 +11,8 @@ type CompanyRepository struct {
 	conn *pgxpool.Pool
 }
 
-func NewCompanyRepository(pool *pgxpool.Pool) CompanyRepository {
-	return CompanyRepository{conn: pool}
+func NewCompanyRepository(pool *pgxpool.Pool) *CompanyRepository {
+	return &CompanyRepository{conn: pool}
 }
 
 func (r *CompanyRepository) InsertCompany(ctx context.Context, company *models.Company) error {

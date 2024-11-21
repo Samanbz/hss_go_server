@@ -11,8 +11,8 @@ type AddressRepository struct {
 	conn *pgxpool.Pool
 }
 
-func NewAddressRepository(pool *pgxpool.Pool) AddressRepository {
-	return AddressRepository{conn: pool}
+func NewAddressRepository(pool *pgxpool.Pool) *AddressRepository {
+	return &AddressRepository{conn: pool}
 }
 
 func (r *AddressRepository) InsertAddress(ctx context.Context, address *models.Address) error {

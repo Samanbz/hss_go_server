@@ -7,11 +7,11 @@ import (
 )
 
 type CompanyService struct {
-	companyRepository repositories.CompanyRepository
+	companyRepository *repositories.CompanyRepository
 }
 
-func NewCompanyService(companyRepository repositories.CompanyRepository) CompanyService {
-	return CompanyService{companyRepository: companyRepository}
+func NewCompanyService(companyRepository *repositories.CompanyRepository) *CompanyService {
+	return &CompanyService{companyRepository: companyRepository}
 }
 
 func (s *CompanyService) InsertCompany(ctx context.Context, company *models.Company) error {

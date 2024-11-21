@@ -11,11 +11,11 @@ import (
 )
 
 type AppointmentHandler struct {
-	appointmentService services.AppointmentService
+	appointmentService *services.AppointmentService
 }
 
-func NewAppointmentHandler(appointmentService services.AppointmentService) AppointmentHandler {
-	return AppointmentHandler{appointmentService: appointmentService}
+func NewAppointmentHandler(appointmentService *services.AppointmentService) *AppointmentHandler {
+	return &AppointmentHandler{appointmentService: appointmentService}
 }
 
 func (h *AppointmentHandler) InsertAppointment(c *fiber.Ctx) error {

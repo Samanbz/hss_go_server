@@ -7,11 +7,11 @@ import (
 )
 
 type AppointmentService struct {
-	appointmentRepository repositories.AppointmentRepository
+	appointmentRepository *repositories.AppointmentRepository
 }
 
-func NewAppointmentService(appointmentRepository repositories.AppointmentRepository) AppointmentService {
-	return AppointmentService{appointmentRepository: appointmentRepository}
+func NewAppointmentService(appointmentRepository *repositories.AppointmentRepository) *AppointmentService {
+	return &AppointmentService{appointmentRepository: appointmentRepository}
 }
 
 func (s *AppointmentService) InsertAppointment(ctx context.Context, appointment *models.Appointment) error {
