@@ -9,9 +9,9 @@ import (
 )
 
 func InitDB() *pgxpool.Pool {
-	dbUrl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", os.Getenv("DB_USER"), os.Getenv("DB_PWD"), os.Getenv("DB_DOMAIN"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
+	connString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", os.Getenv("DB_USER"), os.Getenv("DB_PWD"), os.Getenv("DB_DOMAIN"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
 
-	config, err := pgxpool.ParseConfig(dbUrl)
+	config, err := pgxpool.ParseConfig(connString)
 
 	if err != nil {
 		panic("Error parsing db config: " + err.Error())

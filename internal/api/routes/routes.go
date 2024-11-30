@@ -9,6 +9,7 @@ import (
 func CompanyRoutes(app *fiber.App, CompanyHandler *handlers.CompanyHandler) {
 	app.Post("/company", CompanyHandler.InsertCompany)
 	app.Get("/company", CompanyHandler.GetAllCompanies)
+	app.Get("/company/:id", CompanyHandler.GetCompanyByID)
 }
 
 func AddressRoutes(app *fiber.App, AddressHandler *handlers.AddressHandler) {
@@ -40,4 +41,14 @@ func CustomerRoutes(app *fiber.App, CustomerHandler *handlers.CustomerHandler) {
 func ProductRoutes(app *fiber.App, ProductHandler *handlers.ProductHandler) {
 	app.Post("/product", ProductHandler.InsertProduct)
 	app.Get("/product/:id", ProductHandler.GetProductByID)
+}
+
+func InitRoutes(app *fiber.App, RequestHandlers *handlers.RequestHandlers) {
+	CompanyRoutes(app, RequestHandlers.CompanyHandler)
+	AddressRoutes(app, RequestHandlers.AddressHandler)
+	EmployeeRoutes(app, RequestHandlers.EmployeeHandler)
+	AppointmentRoutes(app, RequestHandlers.AppointmentHandler)
+	ServiceRoutes(app, RequestHandlers.ServiceHandler)
+	CustomerRoutes(app, RequestHandlers.CustomerHandler)
+	ProductRoutes(app, RequestHandlers.ProductHandler)
 }

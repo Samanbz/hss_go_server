@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"hss/internal/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -26,11 +27,11 @@ func (r *CompanyRepository) InsertCompany(ctx context.Context, company *models.C
 
 	err = r.conn.QueryRow(ctx, query, company.Username, company.CompanyName, company.RepFirstname, company.RepLastname, company.Email, company.Password).Scan(&id)
 	if err != nil {
+		fmt.Printf("Error: %v\n", err)
 		return err
 	}
 
 	company.ID = id
-
 	return nil
 }
 
@@ -39,11 +40,12 @@ func (r *CompanyRepository) GetCompanyByID(ctx context.Context, id int) (*models
 	row := r.conn.QueryRow(ctx, query, id)
 
 	company := models.Company{}
-	err := row.Scan(&company.ID, &company.Username, &company.CompanyName, &company.RepFirstname, &company.RepLastname, &company.Email, &company.Password)
-	company.ValidateOutput()
+	err := row.Scan(&company.ID, &company.Username, &company.CompanyName, &company.RepFirstname, &company.RepLastname, &company.Email, &company.OTPSecret, &company.Password)
 	if err != nil {
 		return nil, err
 	}
+	company.ValidateOutput()
+
 	return &company, nil
 }
 
@@ -53,10 +55,11 @@ func (r *CompanyRepository) GetCompanyByUsername(ctx context.Context, username s
 
 	company := models.Company{}
 	err := row.Scan(&company.ID, &company.Username, &company.CompanyName, &company.RepFirstname, &company.RepLastname, &company.Email, &company.OTPSecret, &company.Password)
-	company.ValidateOutput()
 	if err != nil {
 		return nil, err
 	}
+	company.ValidateOutput()
+
 	return &company, nil
 }
 
@@ -72,10 +75,10 @@ func (r *CompanyRepository) GetAllCompanies(ctx context.Context) ([]models.Compa
 	for rows.Next() {
 		company := models.Company{}
 		err := rows.Scan(&company.ID, &company.Username, &company.CompanyName, &company.RepFirstname, &company.RepLastname, &company.Email, &company.OTPSecret, &company.Password)
-		company.ValidateOutput()
 		if err != nil {
 			return nil, err
 		}
+		company.ValidateOutput()
 		companies = append(companies, company)
 	}
 	return companies, nil

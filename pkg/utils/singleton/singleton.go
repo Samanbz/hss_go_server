@@ -8,16 +8,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type RequestHandlers struct {
-	CompanyHandler     *handlers.CompanyHandler
-	AddressHandler     *handlers.AddressHandler
-	EmployeeHandler    *handlers.EmployeeHandler
-	AppointmentHandler *handlers.AppointmentHandler
-	ServiceHandler     *handlers.ServiceHandler
-	CustomerHandler    *handlers.CustomerHandler
-	ProductHandler     *handlers.ProductHandler
-}
-
 func InitCompanySingletons(pool *pgxpool.Pool) (*handlers.CompanyHandler, error) {
 	//TODO add error cases
 	CompanyRepository := repositories.NewCompanyRepository(pool)
@@ -81,7 +71,7 @@ func InitProductSingletons(pool *pgxpool.Pool) (*handlers.ProductHandler, error)
 	return ProductHandler, nil
 }
 
-func InitSingletons(pool *pgxpool.Pool) (*RequestHandlers, error) {
+func InitSingletons(pool *pgxpool.Pool) (*handlers.RequestHandlers, error) {
 	CompanyHandler, err := InitCompanySingletons(pool)
 	if err != nil {
 		return nil, err
@@ -117,7 +107,7 @@ func InitSingletons(pool *pgxpool.Pool) (*RequestHandlers, error) {
 		return nil, err
 	}
 
-	return &RequestHandlers{
+	return &handlers.RequestHandlers{
 		CompanyHandler:     CompanyHandler,
 		AddressHandler:     AddressHandler,
 		EmployeeHandler:    EmployeeHandler,

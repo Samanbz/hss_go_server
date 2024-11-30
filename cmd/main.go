@@ -24,15 +24,8 @@ func main() {
 		panic(err)
 	}
 
-	routes.CompanyRoutes(app, RequestHandlers.CompanyHandler)
-	routes.AddressRoutes(app, RequestHandlers.AddressHandler)
-	routes.EmployeeRoutes(app, RequestHandlers.EmployeeHandler)
-	routes.AppointmentRoutes(app, RequestHandlers.AppointmentHandler)
-	routes.ServiceRoutes(app, RequestHandlers.ServiceHandler)
-	routes.CustomerRoutes(app, RequestHandlers.CustomerHandler)
-	routes.ProductRoutes(app, RequestHandlers.ProductHandler)
+	routes.InitRoutes(app, RequestHandlers)
 
-	app.Get("/", handleRoot)
 	app.Listen(":3000")
 }
 
