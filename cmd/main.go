@@ -1,9 +1,9 @@
 package main
 
 import (
-	"hss/internal/api/routes"
 	"hss/internal/database"
-	"hss/pkg/utils/singleton"
+	"hss/internal/routes"
+	"hss/internal/utils/singleton"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"

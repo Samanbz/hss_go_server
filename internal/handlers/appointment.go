@@ -3,8 +3,8 @@ package handlers
 import (
 	"context"
 	"fmt"
-	"hss/internal/api/services"
 	"hss/internal/models"
+	"hss/internal/services"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"

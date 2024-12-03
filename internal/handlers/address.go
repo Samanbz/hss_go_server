@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"hss/internal/api/services"
 	"hss/internal/models"
+	"hss/internal/services"
 
 	"github.com/gofiber/fiber/v2"
 )

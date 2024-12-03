@@ -13,8 +13,14 @@ type Validatable interface {
 	ValidateOutput() error
 }
 
+type Comparable interface {
+	Hash() string
+	Equals(Comparable) bool
+}
+
 type BaseEntity interface {
 	Serializable
 	Deserializable
 	Validatable
+	Comparable
 }

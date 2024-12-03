@@ -2,8 +2,8 @@ package test
 
 import (
 	"context"
-	"hss/internal/api/repositories"
 	"hss/internal/models"
+	"hss/internal/repositories"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

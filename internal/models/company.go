@@ -2,8 +2,8 @@ package models
 
 import (
 	"encoding/json"
-	"hss/pkg/utils/security"
-	"hss/pkg/validation"
+	"hss/internal/utils/security"
+	"hss/internal/utils/validation"
 )
 
 type Company struct {
@@ -19,8 +19,6 @@ type Company struct {
 
 func NewCompany(username, companyName, repFirstname, repLastname, email, password string) Company {
 
-	hashedPassword := security.HashPassword(password)
-
 	return Company{
 		Username:     username,
 		CompanyName:  companyName,
@@ -28,14 +26,13 @@ func NewCompany(username, companyName, repFirstname, repLastname, email, passwor
 		RepLastname:  repLastname,
 		Email:        email,
 		OTPSecret:    nil,
-		Password:     hashedPassword,
+		Password:     password,
 	}
 }
 
 func NewCompanyFromJSON(jsonData []byte) (*Company, error) {
 	var company Company
 	err := json.Unmarshal(jsonData, &company)
-	company.Password = security.HashPassword(company.Password)
 
 	return &company, err
 }
@@ -55,4 +52,12 @@ func (u Company) ValidateInput() error {
 
 func (u Company) ValidateOutput() error {
 	return validation.Validate.Struct(u)
+}
+
+func (u Company) Hash() string {
+	return security.Hash((string)(u.ToJSON()))
+}
+
+func (u Company) Equals(c Comparable) bool {
+	return u.Hash() == c.Hash()
 }

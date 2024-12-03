@@ -2,7 +2,7 @@ package models
 
 import (
 	"encoding/json"
-	"hss/pkg/validation"
+	"hss/internal/utils/validation"
 	"time"
 )
 

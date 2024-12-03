@@ -3,8 +3,8 @@ package test
 import (
 	"context"
 	"fmt"
-	"hss/internal/api/routes"
-	"hss/pkg/utils/singleton"
+	"hss/internal/routes"
+	"hss/internal/utils/singleton"
 	"log"
 	"time"
 

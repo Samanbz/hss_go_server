@@ -2,8 +2,8 @@ package services
 
 import (
 	"context"
-	"hss/internal/api/repositories"
 	"hss/internal/models"
+	"hss/internal/repositories"
 )
 
 type CompanyService struct {

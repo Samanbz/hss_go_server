@@ -1,9 +1,9 @@
 package singleton
 
 import (
-	"hss/internal/api/handlers"
-	"hss/internal/api/repositories"
-	"hss/internal/api/services"
+	"hss/internal/handlers"
+	"hss/internal/repositories"
+	"hss/internal/services"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

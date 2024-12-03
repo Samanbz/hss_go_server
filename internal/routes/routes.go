@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"hss/internal/api/handlers"
+	"hss/internal/handlers"
 
 	"github.com/gofiber/fiber/v2"
 )

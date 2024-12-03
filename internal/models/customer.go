@@ -2,8 +2,8 @@ package models
 
 import (
 	"encoding/json"
-	"hss/pkg/utils/security"
-	"hss/pkg/validation"
+	"hss/internal/utils/security"
+	"hss/internal/utils/validation"
 )
 
 type Customer struct {
@@ -15,7 +15,7 @@ type Customer struct {
 
 func NewCustomer(username, password, companyID string) *Customer {
 
-	hashedPassword := security.HashPassword(password)
+	hashedPassword := security.Hash(password)
 
 	return &Customer{
 		Username:  username,

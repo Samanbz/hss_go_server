@@ -2,8 +2,8 @@ package models
 
 import (
 	"encoding/json"
-	"hss/pkg/utils/security"
-	"hss/pkg/validation"
+	"hss/internal/utils/security"
+	"hss/internal/utils/validation"
 )
 
 type Address struct {
@@ -42,7 +42,7 @@ func NewAddress(
 func NewAddressFromJSON(jsonData []byte) (*Address, error) {
 	var address Address
 	err := json.Unmarshal(jsonData, &address)
-	address.Password = security.HashPassword(address.Password)
+	address.Password = security.Hash(address.Password)
 
 	return &address, err
 }
