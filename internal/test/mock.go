@@ -2,34 +2,61 @@ package test
 
 import (
 	"context"
+	"fmt"
 	"hss/internal/models"
 	"hss/internal/repositories"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type Mocks struct {
-	companyMock *models.Company
+type MockGroup interface {
+	loadSelf(ctx context.Context, pool *pgxpool.Pool) error
 }
 
-func insertCompanyMock(ctx context.Context, pool *pgxpool.Pool, company *models.Company) (*models.Company, error) {
-	companyRepository := repositories.NewCompanyRepository(pool)
+type CompanyMockGroup struct {
+	mockObjects []*models.Company
+}
 
-	err := companyRepository.InsertCompany(ctx, company)
-	if err != nil {
-		return nil, err
+func NewCompanyMockGroup(mockObjects ...*models.Company) CompanyMockGroup {
+	return CompanyMockGroup{
+		mockObjects: mockObjects,
+	}
+}
+
+func (m CompanyMockGroup) loadSelf(ctx context.Context, pool *pgxpool.Pool) error {
+	companyRepository := repositories.NewCompanyRepository(pool)
+	for _, company := range m.mockObjects {
+		err := companyRepository.InsertCompany(ctx, company)
+		if err != nil {
+			return fmt.Errorf("failed to load company mock: %w", err)
+		}
+	}
+	return nil
+}
+
+type Mocks struct {
+	mockGroups []MockGroup
+}
+
+func NewMocks(ctx context.Context, pool *pgxpool.Pool, mockGroups ...MockGroup) error {
+	mocks := &Mocks{
+		mockGroups: mockGroups,
 	}
 
-	return company, nil
-}
-
-func LoadMocks(ctx context.Context, pool *pgxpool.Pool, mocks *Mocks) error {
-	company, err := insertCompanyMock(ctx, pool, mocks.companyMock)
+	err := mocks.loadSelf(ctx, pool)
 	if err != nil {
 		return err
 	}
 
-	mocks.companyMock = company
+	return nil
+}
 
+func (m *Mocks) loadSelf(ctx context.Context, pool *pgxpool.Pool) error {
+	for _, mockGroup := range m.mockGroups {
+		err := mockGroup.loadSelf(ctx, pool)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }

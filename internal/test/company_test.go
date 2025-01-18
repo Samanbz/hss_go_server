@@ -32,12 +32,15 @@ func TestCompany(t *testing.T) {
 	t.Run("TestGetCompany", func(t *testing.T) {
 		t.Log("TestGetCompany")
 
-		mocks := &Mocks{
-			companyMock: mocks.CompanyInput2,
+		err := NewMocks(
+			ctx, pool,
+			NewCompanyMockGroup(&mocks.CompanyInput2),
+		)
+		if err != nil {
+			t.Fatal(err)
 		}
 
-		LoadMocks(ctx, pool, mocks)
-		testGetCompany(t, app, mocks.companyMock)
+		testGetCompany(t, app, mocks.CompanyInput2)
 	})
 }
 
@@ -73,7 +76,7 @@ func testInsertCompany(t *testing.T, app *fiber.App) {
 	}
 }
 
-func testGetCompany(t *testing.T, app *fiber.App, company *models.Company) {
+func testGetCompany(t *testing.T, app *fiber.App, company models.Company) {
 	statusCode, body, err := TestGet(app, fmt.Sprintf("/company/%d", company.ID), nil)
 	if err != nil {
 		t.Fatal(err)

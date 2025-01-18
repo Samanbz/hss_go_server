@@ -11,7 +11,7 @@ import (
 )
 
 func TestPost(app *fiber.App, url string, body models.Serializable) (int, []byte, error) {
-	req := httptest.NewRequest(http.MethodPost, "/company", bytes.NewBuffer(body.ToJSON()))
+	req := httptest.NewRequest(http.MethodPost, url, bytes.NewBuffer(body.ToJSON()))
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := app.Test(req)

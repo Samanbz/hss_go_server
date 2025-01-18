@@ -10,12 +10,18 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/joho/godotenv"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
 func SetupTestContainer(ctx context.Context) (*postgres.PostgresContainer, *pgxpool.Pool, *fiber.App, error) {
+
+	err := godotenv.Load("test.env")
+	if err != nil {
+		log.Fatalf("Failed to load test env file: %v", err)
+	}
 
 	container, err := postgres.Run(ctx,
 		"postgres:17",

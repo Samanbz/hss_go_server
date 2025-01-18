@@ -2,7 +2,7 @@ package mocks
 
 import "hss/internal/models"
 
-var CompanyInput = &models.Company{
+var CompanyInput = models.Company{
 	Username:     "TestUsername",
 	CompanyName:  "TestCompanyName",
 	RepFirstname: "TestRepFirstname",
@@ -11,7 +11,7 @@ var CompanyInput = &models.Company{
 	Password:     "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b8d5c1c85f6f6a214",
 }
 
-var CompanyInput2 = &models.Company{
+var CompanyInput2 = models.Company{
 	Username:     "TestUsername2",
 	CompanyName:  "TestCompanyName2",
 	RepFirstname: "TestRepFirstname2",
