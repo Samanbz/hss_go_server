@@ -2,9 +2,11 @@ package services
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 	"hss/internal/models"
 	"hss/internal/repositories"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -20,17 +22,44 @@ type AuthService struct {
 	signer         jose.Signer
 }
 
-func NewAuthService(authRepository *repositories.AuthRepository) (*AuthService, error) {
-	encryptionKey := os.Getenv("JWT_ENCRYPTION_KEY")
-	encrypter, err := jose.NewEncrypter(jose.A256GCM, jose.Recipient{Algorithm: jose.DIRECT, Key: encryptionKey}, nil)
-	if err != nil {
-		return nil, err
+func decodeKey(encodedKey string) ([]byte, error) {
+	if encodedKey == "" {
+		return nil, fmt.Errorf("key must not be empty")
 	}
 
-	signatureKey := os.Getenv("JWT_SIGNATURE_KEY")
+	key, err := base64.StdEncoding.DecodeString(encodedKey)
+	if err != nil {
+		return nil, fmt.Errorf("invalid key format: %w", err)
+	}
+	if len(key) != 32 {
+		return nil, fmt.Errorf("key must be 32 bytes long")
+	}
+
+	return key, nil
+}
+
+func NewAuthService(authRepository *repositories.AuthRepository) (*AuthService, error) {
+	env := os.Getenv("JWT_ENCRYPTION_KEY")
+	log.Print(env)
+
+	encryptionKey, err := decodeKey(os.Getenv("JWT_ENCRYPTION_KEY"))
+	if err != nil {
+		log.Fatalf("failed to fetch and decode encryption key: %v", err)
+	}
+
+	encrypter, err := jose.NewEncrypter(jose.A256GCM, jose.Recipient{Algorithm: jose.DIRECT, Key: encryptionKey}, nil)
+	if err != nil {
+		log.Fatalf("failed to instantiate encrypter: %v", err)
+	}
+
+	signatureKey, err := decodeKey(os.Getenv("JWT_SIGNATURE_KEY"))
+	if err != nil {
+		log.Fatalf("failed to fetch and decode signature key: %v", err)
+	}
+
 	signer, err := jose.NewSigner(jose.SigningKey{Algorithm: jose.HS256, Key: signatureKey}, nil)
 	if err != nil {
-		return nil, err
+		log.Fatalf("failed to instantiate signer: %v", err)
 	}
 
 	return &AuthService{authRepository: authRepository, encrypter: encrypter, signer: signer}, nil
@@ -128,13 +157,21 @@ func (s *AuthService) ValidateToken(ctx context.Context, authReq *models.Authori
 		return models.FailedAuthorizationResponse, err
 	}
 
-	encryptionKey := os.Getenv("JWT_ENCRYPTION_KEY")
+	encryptionKey, err := decodeKey(os.Getenv("JWT_ENCRYPTION_KEY"))
+	if err != nil {
+		log.Fatalf("failed to fetch and decode encryption key: %v", err)
+	}
+
 	decryptedJWT, err := parsedJWT.Decrypt(encryptionKey)
 	if err != nil {
 		return models.FailedAuthorizationResponse, err
 	}
 
-	signatureKey := os.Getenv("JWT_SIGNATURE_KEY")
+	signatureKey, err := decodeKey(os.Getenv("JWT_SIGNATURE_KEY"))
+	if err != nil {
+		log.Fatalf("failed to fetch and decode signature key: %v", err)
+	}
+
 	claims := CustomClaims{}
 	if err := decryptedJWT.Claims(signatureKey, &claims); err != nil {
 		return models.FailedAuthorizationResponse, err
