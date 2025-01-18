@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"hss/internal/utils/security"
 	"hss/internal/utils/validation"
 )
 
@@ -42,9 +41,17 @@ func NewAddress(
 func NewAddressFromJSON(jsonData []byte) (*Address, error) {
 	var address Address
 	err := json.Unmarshal(jsonData, &address)
-	address.Password = security.Hash(address.Password)
 
 	return &address, err
+}
+
+func (u Address) ToJSON() []byte {
+	jsonData, _ := json.Marshal(u)
+	return jsonData
+}
+
+func (u *Address) FromJSON(jsonData []byte) error {
+	return json.Unmarshal(jsonData, u)
 }
 
 func (u *Address) ValidateInput() error {

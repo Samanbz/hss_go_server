@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"hss/internal/models"
+	"hss/internal/test/helpers"
 	"hss/internal/test/mocks"
 	"net/http"
 	"testing"
@@ -13,7 +14,7 @@ import (
 )
 
 func TestCompany(t *testing.T) {
-	t.Log("TestCompany")
+	t.Log("Testing Company endpoints...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -32,21 +33,21 @@ func TestCompany(t *testing.T) {
 	t.Run("TestGetCompany", func(t *testing.T) {
 		t.Log("TestGetCompany")
 
-		err := NewMocks(
+		err := mocks.NewMocks(
 			ctx, pool,
-			NewCompanyMockGroup(&mocks.CompanyInput2),
+			mocks.NewCompanyMockGroup(&mocks.MockCompany2),
 		)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		testGetCompany(t, app, mocks.CompanyInput2)
+		testGetCompany(t, app, mocks.MockCompany2)
 	})
 }
 
 func testInsertCompany(t *testing.T, app *fiber.App) {
-	inputCompany := mocks.CompanyInput
-	statusCode, body, err := TestPost(app, "/company", inputCompany)
+	inputCompany := mocks.MockCompany
+	statusCode, body, err := helpers.TestPost(app, "/company", inputCompany)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -63,21 +64,14 @@ func testInsertCompany(t *testing.T, app *fiber.App) {
 		t.Fatal(err)
 	}
 
-	if outputCompany.Username != inputCompany.Username {
-		t.Errorf("expected username %s, got %s", inputCompany.Username, outputCompany.Username)
-	}
-
-	if outputCompany.CompanyName != inputCompany.CompanyName {
-		t.Errorf("expected company name %s, got %s", inputCompany.CompanyName, outputCompany.CompanyName)
-	}
-
-	if outputCompany.RepFirstname != inputCompany.RepFirstname {
-		t.Errorf("expected rep firstname %s, got %s", inputCompany.RepFirstname, outputCompany.RepFirstname)
+	err = helpers.CheckStruct(&outputCompany, &inputCompany, false)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
 
 func testGetCompany(t *testing.T, app *fiber.App, company models.Company) {
-	statusCode, body, err := TestGet(app, fmt.Sprintf("/company/%d", company.ID), nil)
+	statusCode, body, err := helpers.TestGet(app, fmt.Sprintf("/company/%d", company.ID), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,20 +88,8 @@ func testGetCompany(t *testing.T, app *fiber.App, company models.Company) {
 		t.Fatal(err)
 	}
 
-	if resCompany.ID != company.ID {
-		t.Errorf("expected company ID %d, got %d", company.ID, resCompany.ID)
+	err = helpers.CheckStruct(&resCompany, &company, true)
+	if err != nil {
+		t.Fatal(err)
 	}
-
-	if resCompany.Username != company.Username {
-		t.Errorf("expected username %s, got %s", company.Username, resCompany.Username)
-	}
-
-	if resCompany.CompanyName != company.CompanyName {
-		t.Errorf("expected company name %s, got %s", company.CompanyName, resCompany.CompanyName)
-	}
-
-	if resCompany.RepFirstname != company.RepFirstname {
-		t.Errorf("expected rep firstname %s, got %s", company.RepFirstname, resCompany.RepFirstname)
-	}
-
 }

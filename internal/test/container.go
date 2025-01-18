@@ -28,7 +28,7 @@ func SetupTestContainer(ctx context.Context) (*postgres.PostgresContainer, *pgxp
 		postgres.WithDatabase("testdb"),
 		postgres.WithUsername("testuser"),
 		postgres.WithPassword("testpassword"),
-		postgres.WithInitScripts("sql/init_schema.sql"),
+		postgres.WithInitScripts("init_schema.sql"),
 		testcontainers.WithWaitStrategy(wait.ForListeningPort("5432/tcp").WithStartupTimeout(30*time.Second)),
 	)
 	if err != nil {

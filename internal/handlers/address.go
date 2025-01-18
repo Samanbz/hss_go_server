@@ -36,5 +36,5 @@ func (h *AddressHandler) InsertAddress(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(address)
+	return c.Status(fiber.StatusCreated).JSON(address)
 }
