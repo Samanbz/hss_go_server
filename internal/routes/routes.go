@@ -43,6 +43,10 @@ func ProductRoutes(app *fiber.App, ProductHandler *handlers.ProductHandler) {
 	app.Get("/product/:id", ProductHandler.GetProductByID)
 }
 
+func AuthRoutes(app *fiber.App, AuthHandler *handlers.AuthHandler) {
+	app.Post("/login", AuthHandler.ValidateCredentials)
+}
+
 func InitRoutes(app *fiber.App, RequestHandlers *handlers.RequestHandlers) {
 	CompanyRoutes(app, RequestHandlers.CompanyHandler)
 	AddressRoutes(app, RequestHandlers.AddressHandler)

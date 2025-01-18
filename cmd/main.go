@@ -1,6 +1,7 @@
 package main
 
 import (
+	"hss/cmd/middleware"
 	"hss/internal/database"
 	"hss/internal/routes"
 	"hss/internal/utils/singleton"
@@ -23,6 +24,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	app.Use(func(c *fiber.Ctx) error { return middleware.AuthMiddleware(c, *RequestHandlers.AuthHandler) })
 
 	routes.InitRoutes(app, RequestHandlers)
 

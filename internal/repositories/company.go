@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"hss/internal/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -27,7 +26,6 @@ func (r *CompanyRepository) InsertCompany(ctx context.Context, company *models.C
 
 	err = r.conn.QueryRow(ctx, query, company.Username, company.CompanyName, company.RepFirstname, company.RepLastname, company.Email, company.Password).Scan(&id)
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
 		return err
 	}
 

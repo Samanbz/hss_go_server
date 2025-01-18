@@ -8,4 +8,5 @@ type RequestHandlers struct {
 	ServiceHandler     *ServiceHandler
 	CustomerHandler    *CustomerHandler
 	ProductHandler     *ProductHandler
+	AuthHandler        *AuthHandler
 }

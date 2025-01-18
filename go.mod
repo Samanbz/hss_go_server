@@ -62,6 +62,7 @@ require (
 	github.com/shirou/gopsutil/v3 v3.23.12 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
+	github.com/square/go-jose/v3 v3.0.0-20200630053402-0a67ce9b0693 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 	github.com/testcontainers/testcontainers-go v0.34.0 // indirect
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.34.0 // indirect

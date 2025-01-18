@@ -8,101 +8,92 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func InitCompanySingletons(pool *pgxpool.Pool) (*handlers.CompanyHandler, error) {
-	//TODO add error cases
+func InitCompanySingletons(pool *pgxpool.Pool) *handlers.CompanyHandler {
 	CompanyRepository := repositories.NewCompanyRepository(pool)
 	CompanyService := services.NewCompanyService(CompanyRepository)
 	CompanyHandler := handlers.NewCompanyHandler(CompanyService)
 
-	return CompanyHandler, nil
+	return CompanyHandler
 }
 
-func InitAddressSingletons(pool *pgxpool.Pool) (*handlers.AddressHandler, error) {
-	//TODO add error cases
+func InitAddressSingletons(pool *pgxpool.Pool) *handlers.AddressHandler {
 	AddressRepository := repositories.NewAddressRepository(pool)
 	AddressService := services.NewAddressService(AddressRepository)
 	AddressHandler := handlers.NewAddressHandler(AddressService)
 
-	return AddressHandler, nil
+	return AddressHandler
 }
 
-func InitEmployeeSingletons(pool *pgxpool.Pool) (*handlers.EmployeeHandler, error) {
-	//TODO add error cases
+func InitEmployeeSingletons(pool *pgxpool.Pool) *handlers.EmployeeHandler {
 	EmployeeRepository := repositories.NewEmployeeRepository(pool)
 	EmployeeService := services.NewEmployeeService(EmployeeRepository)
 	EmployeeHandler := handlers.NewEmployeeHandler(EmployeeService)
 
-	return EmployeeHandler, nil
+	return EmployeeHandler
 }
 
-func InitAppointmentsSingletons(pool *pgxpool.Pool) (*handlers.AppointmentHandler, error) {
-	//TODO add error cases
+func InitAppointmentsSingletons(pool *pgxpool.Pool) *handlers.AppointmentHandler {
 	AppointmentRepository := repositories.NewAppointmentRepository(pool)
 	AppointmentService := services.NewAppointmentService(AppointmentRepository)
 	AppointmentHandler := handlers.NewAppointmentHandler(AppointmentService)
 
-	return AppointmentHandler, nil
+	return AppointmentHandler
 }
 
-func InitServiceSingletons(pool *pgxpool.Pool) (*handlers.ServiceHandler, error) {
-	//TODO add error cases
+func InitServiceSingletons(pool *pgxpool.Pool) *handlers.ServiceHandler {
 	ServiceRepository := repositories.NewServiceRepository(pool)
 	ServiceService := services.NewServiceService(ServiceRepository)
 	ServiceHandler := handlers.NewServiceHandler(ServiceService)
 
-	return ServiceHandler, nil
+	return ServiceHandler
 }
 
-func InitCustomerSingletons(pool *pgxpool.Pool) (*handlers.CustomerHandler, error) {
-	//TODO add error cases
+func InitCustomerSingletons(pool *pgxpool.Pool) *handlers.CustomerHandler {
 	CustomerRepository := repositories.NewCustomerRepository(pool)
 	CustomerService := services.NewCustomerService(CustomerRepository)
 	CustomerHandler := handlers.NewCustomerHandler(CustomerService)
 
-	return CustomerHandler, nil
+	return CustomerHandler
 }
 
-func InitProductSingletons(pool *pgxpool.Pool) (*handlers.ProductHandler, error) {
-	//TODO add error cases
+func InitProductSingletons(pool *pgxpool.Pool) *handlers.ProductHandler {
 	ProductRepository := repositories.NewProductRepository(pool)
 	ProductService := services.NewProductService(ProductRepository)
 	ProductHandler := handlers.NewProductHandler(ProductService)
 
-	return ProductHandler, nil
+	return ProductHandler
+}
+
+func InitAuthSingletons(pool *pgxpool.Pool) (*handlers.AuthHandler, error) {
+	AuthRepository := repositories.NewAuthRepository(pool)
+	AuthService, err := services.NewAuthService(AuthRepository)
+
+	if err != nil {
+		return nil, err
+	}
+
+	AuthHandler := handlers.NewAuthHandler(AuthService)
+
+	return AuthHandler, nil
 }
 
 func InitSingletons(pool *pgxpool.Pool) (*handlers.RequestHandlers, error) {
-	CompanyHandler, err := InitCompanySingletons(pool)
-	if err != nil {
-		return nil, err
-	}
+	CompanyHandler := InitCompanySingletons(pool)
 
-	AddressHandler, err := InitAddressSingletons(pool)
-	if err != nil {
-		return nil, err
-	}
+	AddressHandler := InitAddressSingletons(pool)
 
-	EmployeeHandler, err := InitEmployeeSingletons(pool)
-	if err != nil {
-		return nil, err
-	}
+	EmployeeHandler := InitEmployeeSingletons(pool)
 
-	AppointmentHandler, err := InitAppointmentsSingletons(pool)
-	if err != nil {
-		return nil, err
-	}
+	AppointmentHandler := InitAppointmentsSingletons(pool)
 
-	ServiceHandler, err := InitServiceSingletons(pool)
-	if err != nil {
-		return nil, err
-	}
+	ServiceHandler := InitServiceSingletons(pool)
 
-	CustomerHandler, err := InitCustomerSingletons(pool)
-	if err != nil {
-		return nil, err
-	}
+	CustomerHandler := InitCustomerSingletons(pool)
 
-	ProductHandler, err := InitProductSingletons(pool)
+	ProductHandler := InitProductSingletons(pool)
+
+	AuthHandler, err := InitAuthSingletons(pool)
+
 	if err != nil {
 		return nil, err
 	}
@@ -115,5 +106,6 @@ func InitSingletons(pool *pgxpool.Pool) (*handlers.RequestHandlers, error) {
 		ServiceHandler:     ServiceHandler,
 		CustomerHandler:    CustomerHandler,
 		ProductHandler:     ProductHandler,
+		AuthHandler:        AuthHandler,
 	}, nil
 }
