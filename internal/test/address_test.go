@@ -4,6 +4,7 @@ import (
 	"hss/internal/models"
 	"hss/internal/test/helpers"
 	"hss/internal/test/mocks"
+	"hss/internal/test/mocks/mock_data"
 	"net/http"
 	"testing"
 	"time"
@@ -29,19 +30,19 @@ func TestAddress(t *testing.T) {
 
 		err := mocks.NewMocks(
 			ctx, pool,
-			mocks.NewCompanyMockGroup(&mocks.MockCompany),
+			mocks.NewCompanyMockGroup(&mock_data.MockCompany),
 		)
 		if err != nil {
 			t.Fatal(err)
 		}
-		mocks.MockAddress.CompanyID = mocks.MockCompany.ID
+		mock_data.MockAddress.CompanyID = mock_data.MockCompany.ID
 
 		testInsertAddress(t, app)
 	})
 }
 
 func testInsertAddress(t *testing.T, app *fiber.App) {
-	inputAddress := mocks.MockAddress
+	inputAddress := mock_data.MockAddress
 	statusCode, body, err := helpers.TestPost(app, "/address", inputAddress)
 	if err != nil {
 		t.Fatal(err)

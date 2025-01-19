@@ -1,4 +1,4 @@
-package mocks
+package mock_data
 
 import "hss/internal/models"
 

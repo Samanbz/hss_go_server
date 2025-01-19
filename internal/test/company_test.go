@@ -5,6 +5,7 @@ import (
 	"hss/internal/models"
 	"hss/internal/test/helpers"
 	"hss/internal/test/mocks"
+	"hss/internal/test/mocks/mock_data"
 	"net/http"
 	"testing"
 	"time"
@@ -35,18 +36,18 @@ func TestCompany(t *testing.T) {
 
 		err := mocks.NewMocks(
 			ctx, pool,
-			mocks.NewCompanyMockGroup(&mocks.MockCompany2),
+			mocks.NewCompanyMockGroup(&mock_data.MockCompany2),
 		)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		testGetCompany(t, app, mocks.MockCompany2)
+		testGetCompany(t, app, mock_data.MockCompany2)
 	})
 }
 
 func testInsertCompany(t *testing.T, app *fiber.App) {
-	inputCompany := mocks.MockCompany
+	inputCompany := mock_data.MockCompany
 	statusCode, body, err := helpers.TestPost(app, "/company", inputCompany)
 	if err != nil {
 		t.Fatal(err)

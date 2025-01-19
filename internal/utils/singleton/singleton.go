@@ -109,3 +109,25 @@ func InitSingletons(pool *pgxpool.Pool) (*handlers.RequestHandlers, error) {
 		AuthHandler:        AuthHandler,
 	}, nil
 }
+
+func InitTestRepos(pool *pgxpool.Pool) (*repositories.Repositories, error) {
+	CompanyRepository := repositories.NewCompanyRepository(pool)
+	AddressRepository := repositories.NewAddressRepository(pool)
+	EmployeeRepository := repositories.NewEmployeeRepository(pool)
+	AppointmentRepository := repositories.NewAppointmentRepository(pool)
+	ServiceRepository := repositories.NewServiceRepository(pool)
+	CustomerRepository := repositories.NewCustomerRepository(pool)
+	ProductRepository := repositories.NewProductRepository(pool)
+	AuthRepository := repositories.NewAuthRepository(pool)
+
+	return &repositories.Repositories{
+		CompanyRepository:     CompanyRepository,
+		AddressRepository:     AddressRepository,
+		EmployeeRepository:    EmployeeRepository,
+		AppointmentRepository: AppointmentRepository,
+		ServiceRepository:     ServiceRepository,
+		CustomerRepository:    CustomerRepository,
+		ProductRepository:     ProductRepository,
+		AuthRepository:        AuthRepository,
+	}, nil
+}
