@@ -21,7 +21,8 @@ func (h *EmployeeHandler) InsertEmployee(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	employee, err := models.NewEmployeeFromJSON(c.Body())
+	employee := new(models.Employee)
+	err := employee.FromJSON(c.Body())
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

@@ -3,7 +3,7 @@ package mock_data
 import "hss/internal/models"
 
 var (
-	MockCompany = models.Company{
+	MockCompany = &models.Company{
 		Username:     "TestUsername",
 		CompanyName:  "TestCmpanyName",
 		RepFirstname: "TestRepFirstname",
@@ -12,7 +12,7 @@ var (
 		Password:     "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b8d5c1c85f6f6a214",
 	}
 
-	MockCompany2 = models.Company{
+	MockCompany2 = &models.Company{
 		Username:     "TestUsername2",
 		CompanyName:  "TestCompanyName2",
 		RepFirstname: "TestRepFirstname2",

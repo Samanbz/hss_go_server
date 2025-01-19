@@ -2,7 +2,7 @@ package models
 
 import (
 	"encoding/json"
-	"hss/internal/utils/security"
+	"hss/internal/utils"
 	"hss/internal/utils/validation"
 )
 
@@ -13,28 +13,27 @@ type Customer struct {
 	CompanyID string `json:"user_id" validate:"required"`
 }
 
-func NewCustomer(username, password, companyID string) *Customer {
-
-	hashedPassword := security.Hash(password)
-
-	return &Customer{
-		Username:  username,
-		Password:  hashedPassword,
-		CompanyID: companyID,
-	}
+func (c Customer) ToJSON() []byte {
+	jsonData, _ := json.Marshal(c)
+	return jsonData
 }
 
-func NewCustomerFromJSON(jsonData []byte) (*Customer, error) {
-	var customer Customer
-	err := json.Unmarshal(jsonData, &customer)
-
-	return &customer, err
+func (c *Customer) FromJSON(jsonData []byte) error {
+	return json.Unmarshal(jsonData, c)
 }
 
 func (c *Customer) ValidateInput() error {
-	return validation.Validate.StructExcept(c, "ID")
+	return validation.GetValidator().StructExcept(c, "ID")
 }
 
 func (c *Customer) ValidateOutput() error {
-	return validation.Validate.Struct(c)
+	return validation.GetValidator().Struct(c)
+}
+
+func (c Customer) Hash() string {
+	return utils.Hash(string(c.ToJSON()))
+}
+
+func (c Customer) Equals(other Customer) bool {
+	return c.Hash() == other.Hash()
 }

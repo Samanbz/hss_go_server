@@ -22,7 +22,8 @@ func (h *CompanyHandler) InsertCompany(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	company, err := models.NewCompanyFromJSON(c.Body())
+	company := new(models.Company)
+	err := company.FromJSON(c.Body())
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

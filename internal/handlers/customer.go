@@ -21,7 +21,8 @@ func (h *CustomerHandler) InsertCustomer(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	customer, err := models.NewCustomerFromJSON(c.Body())
+	customer := new(models.Customer)
+	err := customer.FromJSON(c.Body())
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

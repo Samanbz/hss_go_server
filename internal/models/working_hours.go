@@ -1,6 +1,9 @@
 package models
 
 import (
+	"encoding/json"
+	"hss/internal/utils"
+	"hss/internal/utils/validation"
 	"time"
 )
 
@@ -13,12 +16,27 @@ type WorkingHours struct {
 	CloseTime time.Time `json:"close_time" validate:"required,gtfield=Open"`
 }
 
-func NewWorkingHours(
-	day DayOfWeek, open, close time.Time) *WorkingHours {
+func (w WorkingHours) ToJSON() []byte {
+	jsonData, _ := json.Marshal(w)
+	return jsonData
+}
 
-	return &WorkingHours{
-		Day:       day,
-		OpenTime:  open,
-		CloseTime: close,
-	}
+func (w *WorkingHours) FromJSON(jsonData []byte) error {
+	return json.Unmarshal(jsonData, w)
+}
+
+func (w *WorkingHours) ValidateInput() error {
+	return validation.GetValidator().StructExcept(w, "ID")
+}
+
+func (w *WorkingHours) ValidateOutput() error {
+	return validation.GetValidator().Struct(w)
+}
+
+func (wh WorkingHours) Hash() string {
+	return utils.Hash(string(wh.ToJSON()))
+}
+
+func (wh WorkingHours) Equals(other WorkingHours) bool {
+	return wh.Hash() == other.Hash()
 }

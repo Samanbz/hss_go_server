@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"hss/internal/utils"
 	"hss/internal/utils/validation"
 )
 
@@ -15,31 +16,27 @@ type Product struct {
 	Stock       int     `json:"stock" validate:"required"`
 }
 
-func NewProduct(
-	companyID, addressID, name, description string,
-	price float32, stock int) *Product {
-
-	return &Product{
-		CompanyID:   companyID,
-		AddressID:   addressID,
-		Name:        name,
-		Description: description,
-		Price:       price,
-		Stock:       stock,
-	}
+func (p Product) ToJSON() []byte {
+	jsonData, _ := json.Marshal(p)
+	return jsonData
 }
 
-func NewProductFromJSON(jsonData []byte) (*Product, error) {
-	var product Product
-	err := json.Unmarshal(jsonData, &product)
-
-	return &product, err
+func (p *Product) FromJSON(jsonData []byte) error {
+	return json.Unmarshal(jsonData, p)
 }
 
 func (p *Product) ValidateInput() error {
-	return validation.Validate.StructExcept(p, "ID")
+	return validation.GetValidator().StructExcept(p, "ID")
 }
 
 func (p *Product) ValidateOutput() error {
-	return validation.Validate.Struct(p)
+	return validation.GetValidator().Struct(p)
+}
+
+func (p Product) Hash() string {
+	return utils.Hash(string(p.ToJSON()))
+}
+
+func (p Product) Equals(other Product) bool {
+	return p.Hash() == other.Hash()
 }

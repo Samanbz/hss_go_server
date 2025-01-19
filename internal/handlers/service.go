@@ -21,7 +21,8 @@ func (h *ServiceHandler) InsertService(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	service, err := models.NewServiceFromJSON(c.Body())
+	service := new(models.Service)
+	err := service.FromJSON(c.Body())
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

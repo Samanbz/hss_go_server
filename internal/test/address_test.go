@@ -30,7 +30,7 @@ func TestAddress(t *testing.T) {
 
 		err := mocks.NewMocks(
 			ctx, pool,
-			mocks.NewCompanyMockGroup(&mock_data.MockCompany),
+			mocks.NewCompanyMockGroup(mock_data.MockCompany),
 		)
 		if err != nil {
 			t.Fatal(err)
@@ -60,7 +60,7 @@ func testInsertAddress(t *testing.T, app *fiber.App) {
 		t.Fatal(err)
 	}
 
-	err = helpers.CheckStruct(&outputAddress, &inputAddress, false)
+	err = helpers.CheckStruct(&outputAddress, inputAddress, false)
 	if err != nil {
 		t.Fatal(err)
 	}

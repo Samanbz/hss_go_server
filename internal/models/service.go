@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"hss/internal/utils"
 	"hss/internal/utils/validation"
 )
 
@@ -13,26 +14,27 @@ type Service struct {
 	Price     float32 `json:"price" validate:"required"`
 }
 
-func NewService(addressID, companyID, title string, price float32) *Service {
-	return &Service{
-		AddressID: addressID,
-		CompanyID: companyID,
-		Title:     title,
-		Price:     price,
-	}
+func (s Service) ToJSON() []byte {
+	jsonData, _ := json.Marshal(s)
+	return jsonData
 }
 
-func NewServiceFromJSON(jsonData []byte) (*Service, error) {
-	var service Service
-	err := json.Unmarshal(jsonData, &service)
-
-	return &service, err
+func (s *Service) FromJSON(jsonData []byte) error {
+	return json.Unmarshal(jsonData, s)
 }
 
 func (s *Service) ValidateInput() error {
-	return validation.Validate.StructExcept(s, "ID")
+	return validation.GetValidator().StructExcept(s, "ID")
 }
 
 func (s *Service) ValidateOutput() error {
-	return validation.Validate.Struct(s)
+	return validation.GetValidator().Struct(s)
+}
+
+func (s Service) Hash() string {
+	return utils.Hash(string(s.ToJSON()))
+}
+
+func (s Service) Equals(other Service) bool {
+	return s.Hash() == other.Hash()
 }

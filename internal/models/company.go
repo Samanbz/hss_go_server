@@ -2,7 +2,7 @@ package models
 
 import (
 	"encoding/json"
-	"hss/internal/utils/security"
+	"hss/internal/utils"
 	"hss/internal/utils/validation"
 )
 
@@ -17,26 +17,6 @@ type Company struct {
 	Password     string  `json:"password" validate:"required,sha256"`
 }
 
-func NewCompany(username, companyName, repFirstname, repLastname, email, password string) Company {
-
-	return Company{
-		Username:     username,
-		CompanyName:  companyName,
-		RepFirstname: repFirstname,
-		RepLastname:  repLastname,
-		Email:        email,
-		OTPSecret:    nil,
-		Password:     password,
-	}
-}
-
-func NewCompanyFromJSON(jsonData []byte) (*Company, error) {
-	var company Company
-	err := json.Unmarshal(jsonData, &company)
-
-	return &company, err
-}
-
 func (u Company) ToJSON() []byte {
 	jsonData, _ := json.Marshal(u)
 	return jsonData
@@ -47,15 +27,15 @@ func (u *Company) FromJSON(jsonData []byte) error {
 }
 
 func (u Company) ValidateInput() error {
-	return validation.Validate.StructExcept(u, "ID")
+	return validation.GetValidator().StructExcept(u, "ID")
 }
 
 func (u Company) ValidateOutput() error {
-	return validation.Validate.Struct(u)
+	return validation.GetValidator().Struct(u)
 }
 
 func (u Company) Hash() string {
-	return security.Hash((string)(u.ToJSON()))
+	return utils.Hash(string(u.ToJSON()))
 }
 
 func (u Company) Equals(c Comparable) bool {

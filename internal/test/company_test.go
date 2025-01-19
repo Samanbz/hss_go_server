@@ -36,7 +36,7 @@ func TestCompany(t *testing.T) {
 
 		err := mocks.NewMocks(
 			ctx, pool,
-			mocks.NewCompanyMockGroup(&mock_data.MockCompany2),
+			mocks.NewCompanyMockGroup(mock_data.MockCompany2),
 		)
 		if err != nil {
 			t.Fatal(err)
@@ -65,13 +65,13 @@ func testInsertCompany(t *testing.T, app *fiber.App) {
 		t.Fatal(err)
 	}
 
-	err = helpers.CheckStruct(&outputCompany, &inputCompany, false)
+	err = helpers.CheckStruct(&outputCompany, inputCompany, false)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
-func testGetCompany(t *testing.T, app *fiber.App, company models.Company) {
+func testGetCompany(t *testing.T, app *fiber.App, company *models.Company) {
 	statusCode, body, err := helpers.TestGet(app, fmt.Sprintf("/company/%d", company.ID), nil)
 	if err != nil {
 		t.Fatal(err)
@@ -89,7 +89,7 @@ func testGetCompany(t *testing.T, app *fiber.App, company models.Company) {
 		t.Fatal(err)
 	}
 
-	err = helpers.CheckStruct(&resCompany, &company, true)
+	err = helpers.CheckStruct(&resCompany, company, true)
 	if err != nil {
 		t.Fatal(err)
 	}

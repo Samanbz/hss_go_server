@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"hss/internal/utils"
 	"hss/internal/utils/validation"
 )
 
@@ -15,29 +16,27 @@ type Employee struct {
 	Phone     string `json:"phone" validate:"e164"`
 }
 
-func NewEmployee(firstname, lastname, email, phone string, addressID, companyID int) *Employee {
-
-	return &Employee{
-		Firstname: firstname,
-		Lastname:  lastname,
-		AddressID: addressID,
-		CompanyID: companyID,
-		Email:     email,
-		Phone:     phone,
-	}
+func (e Employee) ToJSON() []byte {
+	jsonData, _ := json.Marshal(e)
+	return jsonData
 }
 
-func NewEmployeeFromJSON(jsonData []byte) (*Employee, error) {
-	var employee Employee
-	err := json.Unmarshal(jsonData, &employee)
-
-	return &employee, err
+func (e *Employee) FromJSON(jsonData []byte) error {
+	return json.Unmarshal(jsonData, e)
 }
 
 func (e *Employee) ValidateInput() error {
-	return validation.Validate.StructExcept(e, "ID")
+	return validation.GetValidator().StructExcept(e, "ID")
 }
 
 func (e *Employee) ValidateOutput() error {
-	return validation.Validate.Struct(e)
+	return validation.GetValidator().Struct(e)
+}
+
+func (e Employee) Hash() string {
+	return utils.Hash(string(e.ToJSON()))
+}
+
+func (e Employee) Equals(other Employee) bool {
+	return e.Hash() == other.Hash()
 }

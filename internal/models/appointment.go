@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"hss/internal/utils"
 	"hss/internal/utils/validation"
 	"time"
 )
@@ -17,34 +18,27 @@ type Appointment struct {
 	CustomerID int       `json:"customer_id" validate:"required"`
 }
 
-func NewAppointment(
-	start, end time.Time,
-	companyID, addressID, employeeID, serviceID, customerID int) *Appointment {
-
-	return &Appointment{
-		Start:      start,
-		End:        end,
-		CompanyID:  companyID,
-		AddressID:  addressID,
-		EmployeeID: employeeID,
-		ServiceID:  serviceID,
-		CustomerID: customerID,
-	}
+func (a Appointment) ToJSON() []byte {
+	jsonData, _ := json.Marshal(a)
+	return jsonData
 }
 
-func NewAppointmentFromJSON(data []byte) (*Appointment, error) {
-	appointment := Appointment{}
-	err := json.Unmarshal(data, &appointment)
-	if err != nil {
-		return nil, err
-	}
-	return &appointment, nil
+func (a *Appointment) FromJSON(jsonData []byte) error {
+	return json.Unmarshal(jsonData, a)
 }
 
 func (a *Appointment) ValidateInput() error {
-	return validation.Validate.Struct(a)
+	return validation.GetValidator().Struct(a)
 }
 
-func (a *Appointment) ValidateOutput() {
-	validation.Validate.Struct(a)
+func (a *Appointment) ValidateOutput() error {
+	return validation.GetValidator().Struct(a)
+}
+
+func (a Appointment) Hash() string {
+	return utils.Hash(string(a.ToJSON()))
+}
+
+func (a Appointment) Equals(other Appointment) bool {
+	return a.Hash() == other.Hash()
 }

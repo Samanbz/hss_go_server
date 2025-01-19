@@ -22,7 +22,8 @@ func (h *AddressHandler) InsertAddress(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	address, err := models.NewAddressFromJSON(c.Body())
+	address := new(models.Address)
+	err := address.FromJSON(c.Body())
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

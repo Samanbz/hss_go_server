@@ -21,7 +21,8 @@ func (h *ProductHandler) InsertProduct(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	product, err := models.NewProductFromJSON(c.Body())
+	product := new(models.Product)
+	err := product.FromJSON(c.Body())
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

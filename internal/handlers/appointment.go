@@ -22,7 +22,8 @@ func (h *AppointmentHandler) InsertAppointment(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	appointment, err := models.NewAppointmentFromJSON(c.Body())
+	appointment := new(models.Appointment)
+	err := appointment.FromJSON(c.Body())
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

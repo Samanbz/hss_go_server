@@ -2,9 +2,6 @@ package models
 
 type Serializable interface {
 	ToJSON() []byte
-}
-
-type Deserializable interface {
 	FromJSON([]byte) error
 }
 
@@ -18,9 +15,8 @@ type Comparable interface {
 	Equals(Comparable) bool
 }
 
-type BaseEntity interface {
+type BaseModel interface {
 	Serializable
-	Deserializable
 	Validatable
 	Comparable
 }

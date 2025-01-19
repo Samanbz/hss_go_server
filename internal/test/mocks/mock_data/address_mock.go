@@ -3,7 +3,7 @@ package mock_data
 import "hss/internal/models"
 
 var (
-	MockAddress = models.Address{
+	MockAddress = &models.Address{
 		Username:  "user1",
 		Password:  "501613c686d94b3f1faf0157ea5242f6e313cbc4520efdf9cd6b9f4917057280",
 		CompanyID: 101,
@@ -16,7 +16,7 @@ var (
 		Longitude: -74.0060,
 	}
 
-	MockAddress2 = models.Address{
+	MockAddress2 = &models.Address{
 		Username:  "user2",
 		Password:  "d11a7fbe8f34311aeb11dfce4ac59679b90973fc44fbab2e11d4f902b8220e99",
 		CompanyID: 102,
@@ -29,7 +29,7 @@ var (
 		Longitude: -74.0324,
 	}
 
-	MockAddress3 = models.Address{
+	MockAddress3 = &models.Address{
 		Username:  "user3",
 		Password:  "a4123be42aa90d448d81b6e327b64d8c6b89523e94f154743a85838600bf33ee",
 		CompanyID: 103,
@@ -42,7 +42,7 @@ var (
 		Longitude: -118.2437,
 	}
 
-	MockAddress4 = models.Address{
+	MockAddress4 = &models.Address{
 		Username:  "user4",
 		Password:  "f4dd11f951f746ee10898fd5482cecadd016f90419ec94c48bb064128ed394a3",
 		CompanyID: 104,

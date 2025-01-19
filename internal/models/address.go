@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"hss/internal/utils"
 	"hss/internal/utils/validation"
 )
 
@@ -19,32 +20,6 @@ type Address struct {
 	Longitude float32 `json:"longitude" validate:"longitude"`
 }
 
-func NewAddress(
-	username, password, street, city, state, zip, country string,
-	latitude, longitude float32,
-	companyID int) *Address {
-
-	return &Address{
-		Username:  username,
-		Password:  password,
-		CompanyID: companyID,
-		Street:    street,
-		City:      city,
-		State:     state,
-		Zip:       zip,
-		Country:   country,
-		Latitude:  latitude,
-		Longitude: longitude,
-	}
-}
-
-func NewAddressFromJSON(jsonData []byte) (*Address, error) {
-	var address Address
-	err := json.Unmarshal(jsonData, &address)
-
-	return &address, err
-}
-
 func (u Address) ToJSON() []byte {
 	jsonData, _ := json.Marshal(u)
 	return jsonData
@@ -55,9 +30,17 @@ func (u *Address) FromJSON(jsonData []byte) error {
 }
 
 func (u *Address) ValidateInput() error {
-	return validation.Validate.StructExcept(u, "ID")
+	return validation.GetValidator().StructExcept(u, "ID")
 }
 
 func (u *Address) ValidateOutput() error {
-	return validation.Validate.Struct(u)
+	return validation.GetValidator().Struct(u)
+}
+
+func (u Address) Hash() string {
+	return utils.Hash(string(u.ToJSON()))
+}
+
+func (u Address) Equals(other Address) bool {
+	return u.Hash() == other.Hash()
 }
