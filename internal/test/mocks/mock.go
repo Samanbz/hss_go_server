@@ -8,13 +8,17 @@ import (
 )
 
 type MockGroup interface {
-	loadSelf(ctx context.Context, pool *pgxpool.Pool) error
+	LoadSelf(ctx context.Context, pool *pgxpool.Pool) error
 }
 
-func NewRelatedMocks(ctx context.Context, pool *pgxpool.Pool, companyMock *models.Company) error {
-	companyMockGroup := NewCompanyMockGroup(companyMock)
+func NewRelatedMocks(ctx context.Context, pool *pgxpool.Pool,
+	companyMock *models.Company, addressMock *models.Address) error {
 
-	err := NewMocks(ctx, pool, companyMockGroup)
+	companyMockGroup := NewCompanyMockGroup(companyMock)
+	addressMockGroup := NewAddressMockGroup(addressMock.WithForeignKey(companyMock.ID))
+	//TODO Add more mock groups here
+
+	err := NewMocks(ctx, pool, companyMockGroup, addressMockGroup)
 	if err != nil {
 		return err
 	}
@@ -31,7 +35,7 @@ func NewMocks(ctx context.Context, pool *pgxpool.Pool, mockGroups ...MockGroup) 
 		mockGroups: mockGroups,
 	}
 
-	err := mocks.loadSelf(ctx, pool)
+	err := mocks.LoadSelf(ctx, pool)
 	if err != nil {
 		return err
 	}
@@ -39,12 +43,14 @@ func NewMocks(ctx context.Context, pool *pgxpool.Pool, mockGroups ...MockGroup) 
 	return nil
 }
 
-func (m *Mocks) loadSelf(ctx context.Context, pool *pgxpool.Pool) error {
+func (m Mocks) LoadSelf(ctx context.Context, pool *pgxpool.Pool) error {
 	for _, mockGroup := range m.mockGroups {
-		err := mockGroup.loadSelf(ctx, pool)
+		err := mockGroup.LoadSelf(ctx, pool)
 		if err != nil {
 			return err
 		}
 	}
 	return nil
 }
+
+// TODO: MORE SOPHISTICATED MOCKING SYSTEM WITH BASEMODEL AND REPOSITORY AS COMMON DENOMINATOR

@@ -19,10 +19,10 @@ func NewAddressMockGroup(mockObjects ...*models.Address) AddressMockGroup {
 	}
 }
 
-func (m AddressMockGroup) loadSelf(ctx context.Context, pool *pgxpool.Pool) error {
+func (m AddressMockGroup) LoadSelf(ctx context.Context, pool *pgxpool.Pool) error {
 	addressRepository := repositories.NewAddressRepository(pool)
 	for _, address := range m.mockObjects {
-		err := addressRepository.InsertAddress(ctx, address)
+		err := addressRepository.Create(ctx, address)
 		if err != nil {
 			return fmt.Errorf("failed to load address mock: %w", err)
 		}
