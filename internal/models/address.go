@@ -44,3 +44,8 @@ func (u Address) Hash() string {
 func (u Address) Equals(other Address) bool {
 	return u.Hash() == other.Hash()
 }
+
+func (u Address) WithForeignKey(companyID int) *Address {
+	u.CompanyID = companyID
+	return &u
+}

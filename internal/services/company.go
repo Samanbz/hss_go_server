@@ -15,7 +15,7 @@ func NewCompanyService(companyRepository *repositories.CompanyRepository) *Compa
 }
 
 func (s *CompanyService) InsertCompany(ctx context.Context, company *models.Company) error {
-	err := s.companyRepository.InsertCompany(context.Background(), company)
+	err := s.companyRepository.Create(context.Background(), company)
 	if err != nil {
 		return err
 	}
@@ -23,7 +23,7 @@ func (s *CompanyService) InsertCompany(ctx context.Context, company *models.Comp
 }
 
 func (s *CompanyService) GetAllCompanies(ctx context.Context) ([]models.Company, error) {
-	companies, err := s.companyRepository.GetAllCompanies(context.Background())
+	companies, err := s.companyRepository.GetAll(context.Background())
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func (s *CompanyService) GetAllCompanies(ctx context.Context) ([]models.Company,
 }
 
 func (s *CompanyService) GetCompanyByID(ctx context.Context, id int) (*models.Company, error) {
-	company, err := s.companyRepository.GetCompanyByID(context.Background(), id)
+	company, err := s.companyRepository.GetByID(context.Background(), id)
 	if err != nil {
 		return nil, err
 	}

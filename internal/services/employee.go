@@ -15,7 +15,7 @@ func NewEmployeeService(employeeRepository *repositories.EmployeeRepository) *Em
 }
 
 func (s *EmployeeService) InsertEmployee(ctx context.Context, employee *models.Employee) error {
-	err := s.employeeRepository.InsertEmployee(context.Background(), employee)
+	err := s.employeeRepository.Create(context.Background(), employee)
 	if err != nil {
 		return err
 	}
@@ -23,7 +23,7 @@ func (s *EmployeeService) InsertEmployee(ctx context.Context, employee *models.E
 }
 
 func (s *EmployeeService) GetEmployeeByID(ctx context.Context, id int) (*models.Employee, error) {
-	employee, err := s.employeeRepository.GetEmployeeByID(context.Background(), id)
+	employee, err := s.employeeRepository.GetByID(context.Background(), id)
 	if err != nil {
 		return nil, err
 	}

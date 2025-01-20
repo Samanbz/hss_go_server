@@ -15,7 +15,7 @@ func NewCustomerService(customerRepository *repositories.CustomerRepository) *Cu
 }
 
 func (s *CustomerService) InsertCustomer(ctx context.Context, customer *models.Customer) error {
-	err := s.customerRepository.InsertCustomer(context.Background(), customer)
+	err := s.customerRepository.Create(context.Background(), customer)
 	if err != nil {
 		return err
 	}
@@ -23,7 +23,7 @@ func (s *CustomerService) InsertCustomer(ctx context.Context, customer *models.C
 }
 
 func (s *CustomerService) GetCustomerByID(ctx context.Context, id int) (*models.Customer, error) {
-	customer, err := s.customerRepository.GetCustomerByID(context.Background(), id)
+	customer, err := s.customerRepository.GetByID(context.Background(), id)
 	if err != nil {
 		return nil, err
 	}

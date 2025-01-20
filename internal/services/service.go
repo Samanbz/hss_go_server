@@ -16,7 +16,7 @@ func NewServiceService(serviceRepository *repositories.ServiceRepository) *Servi
 }
 
 func (s *ServiceService) InsertService(ctx context.Context, service *models.Service) error {
-	err := s.serviceRepository.InsertService(context.Background(), service)
+	err := s.serviceRepository.Create(context.Background(), service)
 	if err != nil {
 		return err
 	}
@@ -24,7 +24,7 @@ func (s *ServiceService) InsertService(ctx context.Context, service *models.Serv
 }
 
 func (s *ServiceService) GetServiceByID(ctx context.Context, id int) (*models.Service, error) {
-	service, err := s.serviceRepository.GetServiceByID(context.Background(), id)
+	service, err := s.serviceRepository.GetByID(context.Background(), id)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func (s *ServiceService) GetServiceByID(ctx context.Context, id int) (*models.Se
 }
 
 func (s *ServiceService) GetServicesByAddressID(ctx context.Context, addressID int) (*[]models.Service, error) {
-	services, err := s.serviceRepository.GetServicesByAddressID(context.Background(), addressID)
+	services, err := s.serviceRepository.GetAllForAddress(context.Background(), addressID)
 	if err != nil {
 		return nil, err
 	}

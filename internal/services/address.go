@@ -15,7 +15,7 @@ func NewAddressService(addressRepository *repositories.AddressRepository) *Addre
 }
 
 func (s *AddressService) InsertAddress(ctx context.Context, address *models.Address) error {
-	err := s.AddressRepository.InsertAddress(context.Background(), address)
+	err := s.AddressRepository.Create(context.Background(), address)
 	if err != nil {
 		return err
 	}

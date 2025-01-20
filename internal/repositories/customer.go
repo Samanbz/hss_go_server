@@ -15,7 +15,7 @@ func NewCustomerRepository(pool *pgxpool.Pool) *CustomerRepository {
 	return &CustomerRepository{conn: pool}
 }
 
-func (r *CustomerRepository) InsertCustomer(ctx context.Context, customer *models.Customer) error {
+func (r *CustomerRepository) Create(ctx context.Context, customer *models.Customer) error {
 	err := customer.ValidateInput()
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (r *CustomerRepository) InsertCustomer(ctx context.Context, customer *model
 	return nil
 }
 
-func (r *CustomerRepository) GetCustomerByID(ctx context.Context, id int) (*models.Customer, error) {
+func (r *CustomerRepository) GetByID(ctx context.Context, id int) (*models.Customer, error) {
 	query := `SELECT * FROM customer WHERE id = $1`
 	row := r.conn.QueryRow(ctx, query, id)
 

@@ -15,7 +15,7 @@ func NewCompanyRepository(pool *pgxpool.Pool) *CompanyRepository {
 	return &CompanyRepository{conn: pool}
 }
 
-func (r *CompanyRepository) InsertCompany(ctx context.Context, company *models.Company) error {
+func (r *CompanyRepository) Create(ctx context.Context, company *models.Company) error {
 	err := company.ValidateInput()
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (r *CompanyRepository) InsertCompany(ctx context.Context, company *models.C
 	return nil
 }
 
-func (r *CompanyRepository) GetCompanyByID(ctx context.Context, id int) (*models.Company, error) {
+func (r *CompanyRepository) GetByID(ctx context.Context, id int) (*models.Company, error) {
 	query := `SELECT * FROM company WHERE id = $1`
 	row := r.conn.QueryRow(ctx, query, id)
 
@@ -47,7 +47,31 @@ func (r *CompanyRepository) GetCompanyByID(ctx context.Context, id int) (*models
 	return &company, nil
 }
 
-func (r *CompanyRepository) GetCompanyByUsername(ctx context.Context, username string) (*models.Company, error) {
+func (r *CompanyRepository) UpdateByID(ctx context.Context, id int, company *models.Company) error {
+	err := company.ValidateInput()
+	if err != nil {
+		return err
+	}
+
+	query := `UPDATE company SET username = $1, company_name = $2, rep_firstname = $3, rep_lastname = $4, email = $5, password = $6 WHERE id = $7`
+	_, err = r.conn.Exec(ctx, query, company.Username, company.CompanyName, company.RepFirstname, company.RepLastname, company.Email, company.Password, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *CompanyRepository) DeleteByID(ctx context.Context, id int) error {
+	query := `DELETE FROM company WHERE id = $1`
+	_, err := r.conn.Exec(ctx, query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *CompanyRepository) GetByUsername(ctx context.Context, username string) (*models.Company, error) {
 	query := `SELECT * FROM company WHERE username = $1`
 	row := r.conn.QueryRow(ctx, query, username)
 
@@ -61,7 +85,7 @@ func (r *CompanyRepository) GetCompanyByUsername(ctx context.Context, username s
 	return &company, nil
 }
 
-func (r *CompanyRepository) GetAllCompanies(ctx context.Context) ([]models.Company, error) {
+func (r *CompanyRepository) GetAll(ctx context.Context) ([]models.Company, error) {
 	query := `SELECT * FROM company`
 	rows, err := r.conn.Query(ctx, query)
 	if err != nil {

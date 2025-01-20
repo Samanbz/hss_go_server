@@ -15,7 +15,7 @@ func NewProductRepository(pool *pgxpool.Pool) *ProductRepository {
 	return &ProductRepository{conn: pool}
 }
 
-func (r *ProductRepository) InsertProduct(ctx context.Context, product *models.Product) error {
+func (r *ProductRepository) Create(ctx context.Context, product *models.Product) error {
 	err := product.ValidateInput()
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (r *ProductRepository) InsertProduct(ctx context.Context, product *models.P
 	return nil
 }
 
-func (r *ProductRepository) GetProductByID(ctx context.Context, id int) (*models.Product, error) {
+func (r *ProductRepository) GetByID(ctx context.Context, id int) (*models.Product, error) {
 	query := `SELECT * FROM product WHERE id = $1`
 	row := r.conn.QueryRow(ctx, query, id)
 

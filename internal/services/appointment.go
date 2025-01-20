@@ -15,7 +15,7 @@ func NewAppointmentService(appointmentRepository *repositories.AppointmentReposi
 }
 
 func (s *AppointmentService) InsertAppointment(ctx context.Context, appointment *models.Appointment) error {
-	err := s.appointmentRepository.InsertAppointment(context.Background(), appointment)
+	err := s.appointmentRepository.Create(context.Background(), appointment)
 	if err != nil {
 		return err
 	}
@@ -23,7 +23,7 @@ func (s *AppointmentService) InsertAppointment(ctx context.Context, appointment 
 }
 
 func (s *AppointmentService) GetAppointmentByID(ctx context.Context, id int) (*models.Appointment, error) {
-	appointment, err := s.appointmentRepository.GetAppointmentByID(context.Background(), id)
+	appointment, err := s.appointmentRepository.GetByID(context.Background(), id)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func (s *AppointmentService) GetAppointmentByID(ctx context.Context, id int) (*m
 }
 
 func (s *AppointmentService) GetAppointmentsByCompanyID(ctx context.Context, company_id int) (*[]models.Appointment, error) {
-	appointments, err := s.appointmentRepository.GetAppointmentsByCompanyID(context.Background(), company_id)
+	appointments, err := s.appointmentRepository.GetAllForCompany(context.Background(), company_id)
 	if err != nil {
 		return nil, err
 	}

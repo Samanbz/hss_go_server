@@ -15,7 +15,7 @@ func NewAppointmentRepository(pool *pgxpool.Pool) *AppointmentRepository {
 	return &AppointmentRepository{conn: pool}
 }
 
-func (r *AppointmentRepository) InsertAppointment(ctx context.Context, appointment *models.Appointment) error {
+func (r *AppointmentRepository) Create(ctx context.Context, appointment *models.Appointment) error {
 	err := appointment.ValidateInput()
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (r *AppointmentRepository) InsertAppointment(ctx context.Context, appointme
 	return nil
 }
 
-func (r *AppointmentRepository) GetAppointmentByID(ctx context.Context, id int) (*models.Appointment, error) {
+func (r *AppointmentRepository) GetByID(ctx context.Context, id int) (*models.Appointment, error) {
 	query := `SELECT * FROM appointment WHERE id = $1`
 	row := r.conn.QueryRow(ctx, query, id)
 
@@ -47,7 +47,7 @@ func (r *AppointmentRepository) GetAppointmentByID(ctx context.Context, id int) 
 	return &appointment, nil
 }
 
-func (r *AppointmentRepository) GetAppointmentsByCompanyID(ctx context.Context, company_id int) (*[]models.Appointment, error) {
+func (r *AppointmentRepository) GetAllForCompany(ctx context.Context, company_id int) (*[]models.Appointment, error) {
 	query := `SELECT * FROM appointment WHERE company_id = $1`
 	rows, err := r.conn.Query(ctx, query, company_id)
 	if err != nil {

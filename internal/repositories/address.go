@@ -15,7 +15,7 @@ func NewAddressRepository(pool *pgxpool.Pool) *AddressRepository {
 	return &AddressRepository{conn: pool}
 }
 
-func (r *AddressRepository) InsertAddress(ctx context.Context, address *models.Address) error {
+func (r *AddressRepository) Create(ctx context.Context, address *models.Address) error {
 	err := address.ValidateInput()
 	if err != nil {
 		return err

@@ -15,7 +15,7 @@ func NewProductService(productRepository *repositories.ProductRepository) *Produ
 }
 
 func (s *ProductService) InsertProduct(ctx context.Context, product *models.Product) error {
-	err := s.productRepository.InsertProduct(context.Background(), product)
+	err := s.productRepository.Create(context.Background(), product)
 	if err != nil {
 		return err
 	}
@@ -23,7 +23,7 @@ func (s *ProductService) InsertProduct(ctx context.Context, product *models.Prod
 }
 
 func (s *ProductService) GetProductByID(ctx context.Context, id int) (*models.Product, error) {
-	product, err := s.productRepository.GetProductByID(context.Background(), id)
+	product, err := s.productRepository.GetByID(context.Background(), id)
 	if err != nil {
 		return nil, err
 	}

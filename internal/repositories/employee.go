@@ -15,7 +15,7 @@ func NewEmployeeRepository(pool *pgxpool.Pool) *EmployeeRepository {
 	return &EmployeeRepository{conn: pool}
 }
 
-func (r *EmployeeRepository) InsertEmployee(ctx context.Context, employee *models.Employee) error {
+func (r *EmployeeRepository) Create(ctx context.Context, employee *models.Employee) error {
 	err := employee.ValidateInput()
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (r *EmployeeRepository) InsertEmployee(ctx context.Context, employee *model
 	return nil
 }
 
-func (r *EmployeeRepository) GetEmployeeByID(ctx context.Context, id int) (*models.Employee, error) {
+func (r *EmployeeRepository) GetByID(ctx context.Context, id int) (*models.Employee, error) {
 	query := `SELECT * FROM employee WHERE id = $1`
 	row := r.conn.QueryRow(ctx, query, id)
 
