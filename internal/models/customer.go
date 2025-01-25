@@ -9,8 +9,8 @@ import (
 type Customer struct {
 	ID        int    `json:"id"`
 	Username  string `json:"username" validate:"required"`
-	Password  string `json:"password" validate:"required"`
-	CompanyID string `json:"user_id" validate:"required"`
+	Password  string `json:"password" validate:"required,sha256"`
+	CompanyID int    `json:"user_id" validate:"required"`
 }
 
 func (c Customer) ToJSON() []byte {
@@ -36,4 +36,9 @@ func (c Customer) Hash() string {
 
 func (c Customer) Equals(other Customer) bool {
 	return c.Hash() == other.Hash()
+}
+
+func (c Customer) WithForeignKey(foreignKey int) *Customer {
+	c.CompanyID = foreignKey
+	return &c
 }

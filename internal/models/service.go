@@ -8,8 +8,8 @@ import (
 
 type Service struct {
 	ID        int     `json:"id"`
-	AddressID string  `json:"address_id" validate:"required"`
-	CompanyID string  `json:"company_id" validate:"required"`
+	AddressID int     `json:"address_id" validate:"required"`
+	CompanyID int     `json:"company_id" validate:"required"`
 	Title     string  `json:"title" validate:"required"`
 	Price     float32 `json:"price" validate:"required"`
 }
@@ -37,4 +37,11 @@ func (s Service) Hash() string {
 
 func (s Service) Equals(other Service) bool {
 	return s.Hash() == other.Hash()
+}
+
+func (s Service) WithForeignKeys(companyID, addressID int) *Service {
+	s.CompanyID = companyID
+	s.AddressID = addressID
+
+	return &s
 }

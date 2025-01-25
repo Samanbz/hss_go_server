@@ -42,3 +42,13 @@ func (a Appointment) Hash() string {
 func (a Appointment) Equals(other Appointment) bool {
 	return a.Hash() == other.Hash()
 }
+
+func (a Appointment) WithForeignKeys(companyID, addressID, employeeID, serviceID, customerID int) *Appointment {
+	a.CompanyID = companyID
+	a.AddressID = addressID
+	a.EmployeeID = employeeID
+	a.ServiceID = serviceID
+	a.CustomerID = customerID
+
+	return &a
+}

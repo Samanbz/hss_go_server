@@ -40,3 +40,9 @@ func (e Employee) Hash() string {
 func (e Employee) Equals(other Employee) bool {
 	return e.Hash() == other.Hash()
 }
+
+func (e Employee) WithForeignKeys(companyID, addressID int) *Employee {
+	e.CompanyID = companyID
+	e.AddressID = addressID
+	return &e
+}

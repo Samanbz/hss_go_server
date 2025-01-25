@@ -8,8 +8,8 @@ import (
 
 type Product struct {
 	ID          int     `json:"id"`
-	CompanyID   string  `json:"company_id" validate:"required"`
-	AddressID   string  `json:"address_id" validate:"required"`
+	CompanyID   int     `json:"company_id" validate:"required"`
+	AddressID   int     `json:"address_id" validate:"required"`
 	Name        string  `json:"name" validate:"required"`
 	Description string  `json:"description" validate:"required"`
 	Price       float32 `json:"price" validate:"required"`
@@ -39,4 +39,11 @@ func (p Product) Hash() string {
 
 func (p Product) Equals(other Product) bool {
 	return p.Hash() == other.Hash()
+}
+
+func (p Product) WithForeignKeys(companyID, addressID int) *Product {
+	p.CompanyID = companyID
+	p.AddressID = addressID
+
+	return &p
 }
